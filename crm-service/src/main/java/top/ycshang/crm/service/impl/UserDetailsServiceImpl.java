@@ -24,7 +24,7 @@ import java.util.List;
  * @author: ycshang
  * @create: 2021-12-16 16:34
  **/
-@Service("userDetailsService")
+@Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Resource
@@ -39,7 +39,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     /***
      * 根据账号获取用户信息
      * @param accountName 账号
-     * @return UserDetails 用户信息
+     * @return UserDetails
      */
     @Override
     public UserDetails loadUserByUsername(String accountName) throws UsernameNotFoundException {
@@ -59,8 +59,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     /***
      * 根据token获取用户权限
      *
-     * @param token token
-     * @return 用户权限
+     * @param token:
      */
     public SecurityUser checkAccountByToken(String token) {
         SystemUser user = null;
@@ -73,9 +72,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     /**
      * 角色信息获取存储
-     *
-     * @param userId 用户id
-     * @return 用户角色列表
      */
     private List<SystemRole> getUserAndRole(String userId) {
         List<SystemUserRole> userRoles = systemUserRoleMapper.selectList(new QueryWrapper<SystemUserRole>().eq("user_id", userId));

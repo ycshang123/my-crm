@@ -17,25 +17,18 @@ import java.util.Date;
  **/
 @Data
 @EqualsAndHashCode(callSuper = false)
-@ApiModel(value = "SystemUserRole对象", description = "系统用户")
 public class SystemUserRole extends Model<SystemUserRole> {
 
-    @ApiModelProperty(value = "主键")
     private Long id;
 
-    @ApiModelProperty(value = "角色ID")
     private String roleId;
 
-    @ApiModelProperty(value = "用户ID")
     private String userId;
 
-    @ApiModelProperty(value = "创建时间")
     private Date createTime;
 
-    @ApiModelProperty(value = "更新时间")
     private Date updateTime;
 
-    @ApiModelProperty(value = "创建者")
     private String createUser;
 
     private String updateUser;

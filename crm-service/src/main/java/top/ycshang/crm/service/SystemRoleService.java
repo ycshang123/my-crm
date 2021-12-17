@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.extension.service.IService;
 import top.ycshang.crm.common.entity.SystemRole;
 import top.ycshang.crm.common.vo.MenuVo;
+import top.ycshang.crm.common.vo.SystemRoleVo;
 
 import java.util.List;
 import java.util.Map;
@@ -14,7 +15,7 @@ public interface SystemRoleService extends IService<SystemRole> {
      *
      * @return map
      */
-    Map<String, List<MenuVo>> getRoleAndUserList();
+    Map<String, List<SystemRoleVo>> getRoleAndUserList();
 
     /**
      * 设置菜单权限，尤其是获取id

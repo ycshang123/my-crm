@@ -5,9 +5,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 import top.ycshang.crm.common.entity.SystemMenu;
 import top.ycshang.crm.common.entity.SystemUserRole;
-import top.ycshang.crm.common.vo.DictType;
-import top.ycshang.crm.common.vo.MenuVo;
-import top.ycshang.crm.common.vo.RoleVo;
+import top.ycshang.crm.common.vo.*;
 import top.ycshang.crm.mapper.SystemMenuMapper;
 import top.ycshang.crm.mapper.SystemUserRoleMapper;
 import top.ycshang.crm.service.SystemMenuService;
@@ -26,6 +24,7 @@ import java.util.Map;
  **/
 @Service
 public class SystemMenuServiceImpl extends ServiceImpl<SystemMenuMapper, SystemMenu> implements SystemMenuService {
+
     @Resource
     private SystemMenuMapper systemMenuMapper;
 
@@ -33,60 +32,68 @@ public class SystemMenuServiceImpl extends ServiceImpl<SystemMenuMapper, SystemM
     private SystemUserRoleMapper systemUserRoleMapper;
 
     @Override
-    public List<MenuVo> getAllMenusByElTree() {
+    public List<SystemMenuVo> getAllMenusByElTree() {
         //查询根节点
-        List<MenuVo> menuVoList = systemMenuMapper.getMenuListByTree();
-        List<MenuVo> res = new ArrayList<>();
-        for (MenuVo mv : menuVoList) {
-            List<MenuVo> permissionList = systemMenuMapper.getMenuListById(mv.getId());
-            mv.setChildren(permissionList);
-            res.add(mv);
+        List<SystemMenuVo> sysMenusVoList = systemMenuMapper.getMenuListByTree();
+        List<SystemMenuVo> sysMenusVoList1 = new ArrayList<>();
+        for (SystemMenuVo sysMenusVo : sysMenusVoList) {
+            List<SystemMenuVo> permissionList = systemMenuMapper.getMenuListById(sysMenusVo.getId());
+
+            sysMenusVo.setChildren(permissionList);
+            sysMenusVoList1.add(sysMenusVo);
         }
-        return res;
+        return sysMenusVoList1;
     }
 
+    /**
+     * 菜单的树形结构
+     *
+     * @return map
+     */
     @Override
-    public Map<String, List<MenuVo>> getMenusList() {
+    public Map<String, List<SystemMenuVo>> getMenusList() {
         //查询所有根节点下面的第一层次节点 ,0 和 1 都展示
-        List<MenuVo> menuVoList = systemMenuMapper.getMenuListByTree();
+        List<SystemMenuVo> sysMenusList = systemMenuMapper.getMenuListByTree();
         // 查询所有记录
-        List<MenuVo> menusVoList = systemMenuMapper.getList();
-        for (MenuVo mv : menuVoList) {
-            List<MenuVo> children = new ArrayList<>();
-            for (MenuVo menuVo : menusVoList) {
-                if (menuVo.getParentId().equals(mv.getId())) {
-                    children.add(menuVo);
+        List<SystemMenuVo> menusVoList = systemMenuMapper.getList();
+        for (SystemMenuVo sysMenusVo : sysMenusList) {
+            List<SystemMenuVo> children = new ArrayList<>();
+            for (SystemMenuVo sysMenus : menusVoList) {
+                if (sysMenus.getParentId().equals(sysMenusVo.getId())) {
+                    children.add(sysMenus);
                 }
             }
-            mv.setChildren(children);
+            sysMenusVo.setChildren(children);
         }
-        Map<String, List<MenuVo>> map = new HashMap<>(4);
-        map.put("menuTree", menuVoList);
+        Map<String, List<SystemMenuVo>> map = new HashMap<>(4);
+        map.put("menuTree", sysMenusList);
         return map;
     }
 
     @Override
-    public RoleVo getTree(String roleId) {
-        List<SystemUserRole> systemUserRoleList = systemUserRoleMapper.selectList(new QueryWrapper<SystemUserRole>().lambda().eq(SystemUserRole::getRoleId, roleId));
-        RoleVo roleVo = new RoleVo();
-        //菜单获取根节点   为了前端vue复选框做准备 checkIdsList
-        List<MenuVo> menuVoList = systemMenuMapper.getMenuListById("0");
+    public SystemRoleVo getTree(String roleId) {
+        List<SystemUserRole> cloudUserRoleList = systemUserRoleMapper.selectList(new QueryWrapper<SystemUserRole>().lambda().eq(SystemUserRole::getRoleId, roleId));
+        SystemRoleVo systemRoleVo = new SystemRoleVo();
+        //菜单获取根节点   为了前端vue 复选框 ☒  √ 做准备 checkIdsList
+        List<SystemMenuVo> menusList = systemMenuMapper.getMenuListById("0");
         List<String> checkIdsList = new ArrayList<>();
-        List<MenuVo> res = new ArrayList<>();
-        for (MenuVo menuVo : menuVoList) {
+        List<SystemMenuVo> menusVoList = new ArrayList<>();
+        for (SystemMenuVo sysMenusVo : menusList) {
             //获取权限和前端页面的 复选框回显做准备
-            List<MenuVo> menuList = systemMenuMapper.getMenuList(menuVo.getId(), roleId);
+            List<SystemMenuVo> menuList = systemMenuMapper.getMenuList(sysMenusVo.getId(), roleId);
             if (menuList != null) {
-                for (MenuVo mv : menuList) {
-                    checkIdsList.add(mv.getId());
+                for (SystemMenu systemMenu : menuList) {
+                    checkIdsList.add(systemMenu.getId());
                 }
             }
-            menuVo.setMenuList(menuList);
-            res.add(menuVo);
+            sysMenusVo.setMenuList(menuList);
+            menusVoList.add(sysMenusVo);
         }
-        roleVo.setCheckedIds(checkIdsList);
-        roleVo.setMenuVos(res);
-        return roleVo;
+        systemRoleVo.setCheckedIds(checkIdsList);
+        systemRoleVo.setSysMenuVo(menusVoList);
+
+        return systemRoleVo;
+
     }
 
     @Override

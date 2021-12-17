@@ -2,9 +2,7 @@ package top.ycshang.crm.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import top.ycshang.crm.common.entity.SystemMenu;
-import top.ycshang.crm.common.vo.DictType;
-import top.ycshang.crm.common.vo.MenuVo;
-import top.ycshang.crm.common.vo.RoleVo;
+import top.ycshang.crm.common.vo.*;
 
 import java.util.List;
 import java.util.Map;
@@ -13,14 +11,16 @@ public interface SystemMenuService extends IService<SystemMenu> {
     /**
      * 获取树形菜单
      *
-     * @return List<MenuVo>
+     * @return List
      */
-    List<MenuVo> getAllMenusByElTree();
+    List<SystemMenuVo> getAllMenusByElTree();
 
     /**
-     * @return Map<String, List < SystemMenuVo>>
+     * 获取菜单
+     *
+     * @return Map
      */
-    Map<String, List<MenuVo>> getMenusList();
+    Map<String, List<SystemMenuVo>> getMenusList();
 
     /**
      * 根据角色id获取角色vo
@@ -28,11 +28,12 @@ public interface SystemMenuService extends IService<SystemMenu> {
      * @param roleId 角色ID
      * @return SystemRoleVo
      */
-    RoleVo getTree(String roleId);
+    SystemRoleVo getTree(String roleId);
 
     /**
      * 获取字典
-     * @return
+     *
+     * @return List
      */
     List<DictType> getDict();
 }

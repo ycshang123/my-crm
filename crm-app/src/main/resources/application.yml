@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: crm-app
+  profiles:
+    active: dev

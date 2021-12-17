@@ -14,7 +14,7 @@ import java.util.Enumeration;
  * @create: 2021-12-16 10:10
  **/
 public class SystemResult<T> implements Serializable {
-    private int code;
+    private final int code;
 
     private String msg;
 
@@ -40,26 +40,6 @@ public class SystemResult<T> implements Serializable {
         this.msg = msg;
     }
 
-    public int getCode() {
-        return code;
-    }
-
-    public T getData() {
-        return data;
-    }
-
-    public String getMsg() {
-        return msg;
-    }
-
-    @JsonIgnore
-    //使之不在json序列化结果当中
-    //4.判断这个响应是不是一个正确的响应
-    public boolean isSuccess() {
-        return this.code == ResponseCode.SUCCESS.getCode();
-    }
-
-    //5.定义返回对象的方法
     public static <T> SystemResult<T> createBySuccess() {
         return new SystemResult<T>(ResponseCode.SUCCESS.getCode());
     }
@@ -157,6 +137,23 @@ public class SystemResult<T> implements Serializable {
 
     public static boolean isNullOrEmpty(Object obj) {
         return null == obj || "".equals(obj);
+    }
+
+    public int getCode() {
+        return code;
+    }
+
+    public T getData() {
+        return data;
+    }
+
+    public String getMsg() {
+        return msg;
+    }
+
+    @JsonIgnore
+    public boolean isSuccess() {
+        return this.code == ResponseCode.SUCCESS.getCode();
     }
 
 }

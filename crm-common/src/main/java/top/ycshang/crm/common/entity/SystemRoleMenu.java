@@ -17,28 +17,20 @@ import java.util.Date;
  **/
 @Data
 @EqualsAndHashCode(callSuper = false)
-@ApiModel(value = "SystemRoleMenu对象", description = "系统角色菜单")
 public class SystemRoleMenu extends Model<SystemRoleMenu> {
 
-    @ApiModelProperty(value = "主键")
     private Long id;
 
-    @ApiModelProperty(value = "角色ID")
     private Long roleId;
 
-    @ApiModelProperty(value = "菜单ID")
     private Long menuId;
 
-    @ApiModelProperty(value = "创建时间")
     private Date createTime;
 
-    @ApiModelProperty(value = "更新时间")
     private Date updateTime;
 
-    @ApiModelProperty(value = "创建者")
     private String createUser;
 
-    @ApiModelProperty(value = "更新者")
     private String updateUser;
 
     @Override
